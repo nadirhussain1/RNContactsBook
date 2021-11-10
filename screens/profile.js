@@ -10,17 +10,15 @@ import colors from '../utils/colors';
 
 export default class Profile extends React.Component{
 
-   state = {
-     contact:{},
-   }
-
-   async componentDidMount(){
-      const contact = await fetchRandomContact();
-      this.setState({contact});
-   }
 
    render(){
-     const{avatar,name,email,phone,cell} = this.state.contact;
+     const { navigation,route} = this.props;
+
+     console.log('Contact'+JSON.stringify(route.params));
+     const {
+       avatar, name, email, phone, cell,
+     } = route.params;
+
 
      return(
        <View style={styles.container}>
