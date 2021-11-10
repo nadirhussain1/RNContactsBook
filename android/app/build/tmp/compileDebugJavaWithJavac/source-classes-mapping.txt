@@ -1,0 +1,14 @@
+com/rncontactsbook/BuildConfig.java
+ com.rncontactsbook.BuildConfig
+com/rncontactsbook/MainApplication.java
+ com.rncontactsbook.MainApplication
+ com.rncontactsbook.MainApplication$1
+com/rncontactsbook/MainActivity.java
+ com.rncontactsbook.MainActivity
+com/rncontactsbook/ReactNativeFlipper.java
+ com.rncontactsbook.ReactNativeFlipper
+ com.rncontactsbook.ReactNativeFlipper$1
+ com.rncontactsbook.ReactNativeFlipper$2
+ com.rncontactsbook.ReactNativeFlipper$2$1
+com/facebook/react/PackageList.java
+ com.facebook.react.PackageList
