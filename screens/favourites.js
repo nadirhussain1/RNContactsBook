@@ -9,29 +9,36 @@ import {
 
 import { fetchContacts } from '../utils/api';
 import ContactThumbnail from '../components/ContactThumbnail';
+import store from '../store';
 
 export default class Favourites extends React.Component {
   state = {
-    contacts: [],
-    loading: true,
-    error: false,
+    contacts:store.getState().contacts,
+    loading: store.getState().isFetchingContacts,
+    error: store.getState().error,
    };
 
    async componentDidMount() {
-     try {
-           const contacts = await fetchContacts();
-           this.setState({
-              contacts,
-              loading: false,
-              error: false,
-            });
+     const {contacts} = this.state;
 
-       } catch (e) {
-        this.setState({
-          loading: false,
-          error: true,
-        });
+     this.unsubscribe = store.onChange(() =>
+       this.setState({
+          contacts: store.getState().contacts,
+          loading: store.getState().isFetchingContacts,
+          error:store.getState().error,
+       })
+      );
+
+      if(contacts.length === 0){
+         const fetchedContacts = await fetchContacts();
+
+         store.setState({contacts:fetchedContacts, isFetchingContacts:false});
       }
+
+  }
+
+  componentWillUnmount(){
+    this.unsubscribe();
   }
 
   renderFavoriteThumbnail = ({ item }) => {

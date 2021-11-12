@@ -2,23 +2,31 @@ import React from 'react';
 import {StyleSheet, Text, View, FlatList, ActivityIndicator} from 'react-native';
 import ContactListItem from '../components/ContactListItem';
 import {fetchContacts} from '../utils/api';
+import store from '../store';
 
 export default class Contacts extends React.Component{
   state = {
-    loading:true,
-    error:false,
-    contactsList:[],
+    loading:store.getState().isFetchingContacts,
+    error:store.getState().error,
+    contacts:store.getState().contacts,
   };
 
   async componentDidMount(){
-      try{
-           const contactsList = await fetchContacts();
-           this.setState({loading:false, error:false,contactsList});
+    this.unsubscribe = store.onChange(() =>
+       this.setState({
+          contacts:store.getState().contacts,
+          loading:store.getState().isFetchingContacts,
+          error:store.getState().error,
+       })
+     );
 
-      }catch(e){
-        this.setState({loading:false, error:true});
+     const contacts = await fetchContacts();
 
-      }
+     store.setState({contacts,isFetchingContacts:false});
+  }
+
+  componentWillUnmount(){
+    this.unsubscribe();
   }
 
   renderContactItem = ({item}) => {
@@ -37,8 +45,8 @@ export default class Contacts extends React.Component{
   };
 
   render(){
-     const{loading,error,contactsList} = this.state;
-     const contactsSorted = contactsList.sort( (a,b) => {
+     const{loading,error,contacts} = this.state;
+     const contactsSorted = contacts.sort( (a,b) => {
           if(a.displayName > b.displayName){
                return 1;
            }
